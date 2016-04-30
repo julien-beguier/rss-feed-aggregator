@@ -1,0 +1,18 @@
+TODO:
+
+- Serialization :
+	-- sauvegarde flux dans fichier
+	-- sauvegarde login/password dans fichier
+
+- JTree :
+	-- ajout d'une profondeur dans l'arbre, les articles par flux
+	-- modifier les updateDataList & rssData en conséquence
+
+- Lecture :
+	-- gestion de la lecture d'un article, flux, catégorie
+
+- JUnit :
+	-- tests unitaires
+	
+- Erreur :
+	

@@ -1,0 +1,25 @@
+{
+	authentication : {
+		login: "",
+		password: ""
+	},
+	feeds : {
+		categories : [
+			{name : "News"},
+			{name : "eSport"}
+		],
+		rssFeeds : [
+			{name : "Les news du monde", category : "News", feedUrl : "http://google.fr"},
+			{name : "Yolo News", category : "News", feedUrl : "http://google.fr"},
+			{name : "Infos BFM.tv", category : "News", feedUrl : "http://google.fr"},
+			{name : "MLG Colombus 2016", category : "eSport", feedUrl : "http://google.fr"},
+			{name : "CSGO C'est le jeu eSport de l'année", category : "eSport", feedUrl : "http://google.fr"}
+		]
+	},
+	settings: {
+		server: {
+			ip: "127.0.0.1",
+			port: 9000
+		}
+	}
+}

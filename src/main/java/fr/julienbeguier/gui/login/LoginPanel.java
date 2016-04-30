@@ -94,7 +94,7 @@ public class LoginPanel extends JPanel {
 					params.put(Constants.VALUE_PASSWORD, MessageDigestUtils.getInstance().md5(password));
 					Action action = new Action(Action.ACTION_LOGIN);
 					action.setParams(params);
-					controller.control(action);
+					LoginPanel.this.controller.control(action);
 				}else {
 					// REGISTER
 					if (login.isEmpty() || password.isEmpty() || email.isEmpty()) {
@@ -107,7 +107,7 @@ public class LoginPanel extends JPanel {
 					params.put(Constants.VALUE_EMAIL, email);
 					Action action = new Action(Action.ACTION_REGISTER);
 					action.setParams(params);
-					controller.control(action);
+					LoginPanel.this.controller.control(action);
 				}
 			}
 		});

@@ -18,7 +18,7 @@ public class RssClient extends AbstractModel {
 
 	// SERVER
 	private final String	SERVER_IP;
-	private final int		SERVER_PORT;
+//	private final int		SERVER_PORT;
 
 	// CONTROLLER
 	private Controller		controller;
@@ -29,9 +29,9 @@ public class RssClient extends AbstractModel {
 	// OTHERS
 	private boolean			logged;
 
-	public RssClient(String serverIp, int serverPort) {
+	public RssClient(String serverIp/*, int serverPort*/) {
 		SERVER_IP = serverIp;
-		SERVER_PORT = serverPort;
+//		SERVER_PORT = serverPort;
 
 		this.controller = new Controller(this);
 		
@@ -39,7 +39,7 @@ public class RssClient extends AbstractModel {
 
 		this.logged = false;
 
-		System.out.println("SERVER IS " + SERVER_IP + ":" + SERVER_PORT);
+		System.out.println("SERVER IS " + SERVER_IP/* + ":" + SERVER_PORT*/);
 	}
 
 	public void login(String login, String password) {

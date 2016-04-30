@@ -32,7 +32,7 @@ public class Configuration {
 	private final String	CONF_KEY_SETTINGS = "settings";
 	private final String	CONF_KEY_SETTINGS_SERVER = "server";
 	private final String	CONF_KEY_SETTINGS_SERVER_IP = "ip";
-	private final String	CONF_KEY_SETTINGS_SERVER_PORT = "port";
+//	private final String	CONF_KEY_SETTINGS_SERVER_PORT = "port";
 	
 	private final String	CONF_KEY_FEEDS = "feeds";
 	private final String	CONF_KEY_FEEDS_CATEGORIES = "categories";
@@ -95,7 +95,7 @@ public class Configuration {
 		this.settings.put(this.CONF_KEY_AUTHENTICATION_LOGIN, this.authenticationObj.get(this.CONF_KEY_AUTHENTICATION_LOGIN));
 		this.settings.put(this.CONF_KEY_AUTHENTICATION_PASSWORD, this.authenticationObj.get(this.CONF_KEY_AUTHENTICATION_PASSWORD));
 		this.settings.put(this.CONF_KEY_SETTINGS_SERVER_IP, this.serverObj.get(this.CONF_KEY_SETTINGS_SERVER_IP));
-		this.settings.put(this.CONF_KEY_SETTINGS_SERVER_PORT, this.serverObj.get(this.CONF_KEY_SETTINGS_SERVER_PORT));
+//		this.settings.put(this.CONF_KEY_SETTINGS_SERVER_PORT, this.serverObj.get(this.CONF_KEY_SETTINGS_SERVER_PORT));
 	}
 	
 	public void saveConfiguration() {
@@ -105,7 +105,7 @@ public class Configuration {
 			File configurationFile = new File(this.CONFIGURATION_URL.toURI());
 			BufferedWriter bw = new BufferedWriter(new FileWriter(configurationFile.getAbsoluteFile()));
 
-			saveContent = ""; // TODO save data
+			saveContent = this.configurationObj.toString();
 			bw.write(saveContent);
 			bw.close();
 		} catch (IOException | URISyntaxException e) {
@@ -149,9 +149,9 @@ public class Configuration {
 		return this.CONF_KEY_SETTINGS_SERVER_IP;
 	}
 
-	public final String getKeyServerPort() {
-		return this.CONF_KEY_SETTINGS_SERVER_PORT;
-	}
+//	public final String getKeyServerPort() {
+//		return this.CONF_KEY_SETTINGS_SERVER_PORT;
+//	}
 	
 	public final String getKeyFeeds() {
 		return this.CONF_KEY_FEEDS;

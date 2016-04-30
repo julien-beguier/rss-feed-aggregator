@@ -21,7 +21,7 @@ public class Launcher {
 		Configuration configuration = Configuration.getInstance();
 		Map<String, Object> settings = configuration.getSettings();
 		
-		RssClient rc = new RssClient((String) settings.get(configuration.getKeyServerIp()), (Integer) settings.get(configuration.getKeyServerPort()));
+		RssClient rc = new RssClient((String) settings.get(configuration.getKeyServerIp())/*, (Integer) settings.get(configuration.getKeyServerPort())*/);
 		rc.login((String) settings.get(configuration.getKeyAuthenticationLogin()), (String) settings.get(configuration.getKeyAuthenticationPassword()));
 	}
 

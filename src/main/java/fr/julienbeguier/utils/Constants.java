@@ -22,12 +22,14 @@ public class Constants {
 	// GUI MAINFRAME
 	public final static float	RATIO = 1.5f;
 	public final static String	JMENU_RSSMENU_TITLE = "Rss";
+	public final static String	JMENU_SETTINGS_TILTE = "Settings";
 	public final static String	JMENU_ABOUTMENU_TITLE = "About us";
 	public final static String	JMENUITEM_ADD_FEED_TITLE = "Add a feed";
 	public final static String	JMENUITEM_ADD_CATEGORY_TITLE = "Add a category";
 	public final static String	JMENUITEM_REMOVE_FEED_TITLE = "Remove a feed";
 	public final static String	JMENUITEM_REMOVE_CATEGORY_TITLE = "Remove a category";
 	public final static String	JMENUITEM_QUIT_TITLE = "Quit";
+	public final static String	JMENUITEM_SAVE_CONFIGURATION_TITLE = "Save configuration";
 	public final static String	JMENUITEM_ABOUT_TITLE = "About RssFeedAggregator";
 	public final static String	ABOUT_TITLE = "About RssFeedAggregator";
 	public final static String	ABOUT_MESSAGE = "This program is the desktop version\nand part of the project RssFeeAggragor.\n\nMade by :\nJulien Béguier (beguie_j)\nValentin Pinilla (pinill_v)\nBilel Benamira (benami_b)\nYoussef Radoui (radoui_y)\nSarah Schneider (schnei_s)";

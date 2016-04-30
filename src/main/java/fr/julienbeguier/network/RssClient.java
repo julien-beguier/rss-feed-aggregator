@@ -1,7 +1,9 @@
 package fr.julienbeguier.network;
 
 import java.awt.Dimension;
+import java.util.Map;
 
+import fr.julienbeguier.configuration.Configuration;
 import fr.julienbeguier.controller.Controller;
 import fr.julienbeguier.data.RssData;
 import fr.julienbeguier.gui.MainFrame;
@@ -43,6 +45,10 @@ public class RssClient extends AbstractModel {
 	}
 
 	public void login(String login, String password) {
+		
+		System.out.println("Login : " + login);
+		System.out.println("Password : " + password);
+		
 		if (!login.isEmpty() && !password.isEmpty()) {
 			if (tryLogin(login, password) == true)
 				return;
@@ -57,6 +63,11 @@ public class RssClient extends AbstractModel {
 		// TODO LOGIN TO SERVER
 		if (login.equals("admin") && password.equals(MessageDigestUtils.getInstance().md5("admin"))) {
 			System.out.println("Logged !");
+			Configuration configuration = Configuration.getInstance();
+			Map<String, Object> settings = configuration.getSettings();
+			settings.put(configuration.getKeyAuthenticationLogin(), login);
+			settings.put(configuration.getKeyAuthenticationPassword(), password);
+			configuration.setSettings(settings);
 			return true;
 		}
 		return false;

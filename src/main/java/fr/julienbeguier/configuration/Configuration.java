@@ -6,8 +6,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.HashMap;
@@ -80,11 +78,10 @@ public class Configuration {
 
 		try {
 			this.configurationObj = new JSONObject(confFileContent);
-			this.authenticationObj = this.configurationObj.getJSONObject(this.CONF_KEY_AUTHENTICATION);
 
+			this.authenticationObj = this.configurationObj.getJSONObject(this.CONF_KEY_AUTHENTICATION);
 			this.settingsObj = this.configurationObj.getJSONObject(this.CONF_KEY_SETTINGS);
 			this.serverObj = this.settingsObj.getJSONObject(this.CONF_KEY_SETTINGS_SERVER);
-			
 			this.feedsObj = this.configurationObj.getJSONObject(this.CONF_KEY_FEEDS);
 
 		} catch (JSONException e) {
@@ -105,6 +102,10 @@ public class Configuration {
 			File configurationFile = new File(this.CONFIGURATION_URL.toURI());
 			BufferedWriter bw = new BufferedWriter(new FileWriter(configurationFile.getAbsoluteFile()));
 
+			this.configurationObj.put(this.CONF_KEY_AUTHENTICATION, this.authenticationObj);
+			this.configurationObj.put(this.CONF_KEY_SETTINGS, this.settingsObj);
+			this.configurationObj.put(this.CONF_KEY_SETTINGS_SERVER, this.serverObj);
+			this.configurationObj.put(this.CONF_KEY_FEEDS, this.feedsObj);			
 			saveContent = this.configurationObj.toString();
 			bw.write(saveContent);
 			bw.close();
@@ -122,6 +123,10 @@ public class Configuration {
 
 	public Map<String, Object> getSettings() {
 		return this.settings;
+	}
+	
+	public void setSettings(Map<String, Object> settings) {
+		this.settings = settings;
 	}
 	
 	public JSONObject getFeeds() {

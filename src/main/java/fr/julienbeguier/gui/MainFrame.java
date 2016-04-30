@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
@@ -58,12 +60,14 @@ public class MainFrame extends JFrame implements Observer {
 	// GUI MENU
 	private JMenuBar				menuBar;
 	private JMenu					rssMenu;
+	private JMenu					settingsMenu;
 	private JMenu					aboutMenu;
 	private JMenuItem				addFeedMenuItem;
 	private JMenuItem				addCategoryMenuItem;
 	private JMenuItem				removeFeedMenuItem;
 	private JMenuItem				removeCategoryMenuItem;
 	private JMenuItem				quitMenuItem;
+	private JMenuItem				saveSettingsMenuItem;
 	private JMenuItem				aboutMenuItem;
 	private AddNodeFrame			anf;
 	private RemoveNodeFrame			rnf;
@@ -115,18 +119,28 @@ public class MainFrame extends JFrame implements Observer {
 		this.setLayout(new BorderLayout());
 
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent event) {
+				Configuration.getInstance().saveConfiguration();
+				System.exit(0);
+			}
+		});
 	}
 
 	public void initGUI() {
 		// MENU
 		this.menuBar = new JMenuBar();
 		this.rssMenu = new JMenu(Constants.JMENU_RSSMENU_TITLE);
+		this.settingsMenu = new JMenu(Constants.JMENU_SETTINGS_TILTE);
 		this.aboutMenu = new JMenu(Constants.JMENU_ABOUTMENU_TITLE);
 		this.addFeedMenuItem = new JMenuItem(Constants.JMENUITEM_ADD_FEED_TITLE);
 		this.addCategoryMenuItem = new JMenuItem(Constants.JMENUITEM_ADD_CATEGORY_TITLE);
 		this.removeFeedMenuItem = new JMenuItem(Constants.JMENUITEM_REMOVE_FEED_TITLE);
 		this.removeCategoryMenuItem = new JMenuItem(Constants.JMENUITEM_REMOVE_CATEGORY_TITLE);
 		this.quitMenuItem = new JMenuItem(Constants.JMENUITEM_QUIT_TITLE);
+		this.saveSettingsMenuItem = new JMenuItem(Constants.JMENUITEM_SAVE_CONFIGURATION_TITLE);
 		this.aboutMenuItem = new JMenuItem(Constants.JMENUITEM_ABOUT_TITLE);
 
 		this.addFeedMenuItem.addActionListener(new ActionListener() {
@@ -161,7 +175,14 @@ public class MainFrame extends JFrame implements Observer {
 		this.quitMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				Configuration.getInstance().saveConfiguration();
 				System.exit(0);
+			}
+		});
+		this.saveSettingsMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Configuration.getInstance().saveConfiguration();
 			}
 		});
 		this.aboutMenuItem.addActionListener(new ActionListener() {
@@ -174,8 +195,10 @@ public class MainFrame extends JFrame implements Observer {
 		this.rssMenu.add(this.removeFeedMenuItem);
 		this.rssMenu.add(this.removeCategoryMenuItem);
 		this.rssMenu.add(this.quitMenuItem);
+		this.settingsMenu.add(this.saveSettingsMenuItem);
 		this.aboutMenu.add(this.aboutMenuItem);
 		this.menuBar.add(this.rssMenu);
+		this.menuBar.add(settingsMenu);
 		this.menuBar.add(this.aboutMenu);
 		this.setJMenuBar(this.menuBar);
 
@@ -387,7 +410,7 @@ public class MainFrame extends JFrame implements Observer {
 			if (type == Type.Feed) {
 				String feedName = vars[0];
 				String feedCategory = vars[1];
-				
+
 				if (this.rssData.getFeeds().contains(feedName)) {
 					// removing feed from the feed list & rsscategories map
 					this.rssData.getFeeds().remove(feedName);
@@ -395,7 +418,7 @@ public class MainFrame extends JFrame implements Observer {
 				}
 			}else {
 				String categoryName = vars[0];
-				
+
 				if (this.rssData.getCategories().contains(categoryName)) {
 					// removing category from the category list & from the rsscategories map
 					this.rssData.getCategories().remove(categoryName);

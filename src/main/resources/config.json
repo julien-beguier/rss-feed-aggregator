@@ -5,16 +5,11 @@
 	},
 	feeds : {
 		categories : [
-			{name : "Manga"},
-			{name : "01 Net"},
-			{name : "News"}
+			{name : "Manga"}
 		],
 		rssFeeds : [
-			{name : "Anime-Kun", category : "Manga", feedUrl : "http://www.anime-kun.net/webzine/feed"},
-			{name : "01 Net Objets Connectés", category : "01 Net", feedUrl : "http://www.01net.com/rss/objets-connectes/"},
-			{name : "01 Net Jeux Video", category : "01 Net", feedUrl : "http://www.01net.com/rss/jeux-video/"},
-			{name : "Le Figaro - Magazine", category : "News", feedUrl : "http://www.lefigaro.fr/rss/figaro_lefigaromagazine.xml"},
-			{name : "Le Figaro - Santé", category : "News", feedUrl : "http://www.lefigaro.fr/rss/figaro_sante.xml"}
+			{name : "Anime-Kun Webzine", category : "Manga", feedUrl : "http://www.anime-kun.net/webzine/feed"},
+			{name : "Anime-Kun Latest comments", category : "Manga", feedUrl : "http://www.anime-kun.net/webzine/comments/feed"}
 		]
 	},
 	settings: {

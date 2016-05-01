@@ -34,9 +34,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.sun.syndication.feed.synd.SyndContent;
-import com.sun.syndication.feed.synd.SyndEntry;
-
 import fr.julienbeguier.configuration.Configuration;
 import fr.julienbeguier.controller.Controller;
 import fr.julienbeguier.data.RssCategory;
@@ -51,7 +48,6 @@ import fr.julienbeguier.nodes.RootNode;
 import fr.julienbeguier.observer.Notification;
 import fr.julienbeguier.observer.Observer;
 import fr.julienbeguier.utils.Constants;
-import fr.valentinpinilla.library.FluxRss;
 
 public class MainFrame extends JFrame implements Observer {
 
@@ -467,26 +463,8 @@ public class MainFrame extends JFrame implements Observer {
 			// TODO REMOVE CATEGORY FAILURE
 			// TODO JOPTIONPANE
 		}else if (notification.getNotification().equals(Action.ACTION_VIEW_FEED)) {
-			String url = params.get(Constants.VALUE_URL).toString();
-			StringBuilder sb = new StringBuilder();
-			
-			System.out.println("URL : " + url);
-
-			FluxRss fr = new FluxRss(params.get(Constants.VALUE_URL).toString());
-			Iterator<?> entryIter = fr.getFeed().getEntries().iterator();
-			while (entryIter.hasNext()) {
-				SyndEntry syndEntry = (SyndEntry) entryIter.next();
-
-				if (syndEntry.getContents() != null) {
-					Iterator<?> it = syndEntry.getContents().iterator();
-					while (it.hasNext()) {
-						SyndContent syndContent = (SyndContent) it.next();
-
-						sb.append(syndContent.getValue());
-					}
-				}
-			}
-			this.jep.setText(sb.toString());
+			System.out.println(params.get(Constants.VALUE_FEED));
+			this.jep.setText((String) params.get(Constants.VALUE_FEED));
 			this.jep.setCaretPosition(0);
 		}
 	}

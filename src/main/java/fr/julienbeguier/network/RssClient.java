@@ -2,9 +2,13 @@ package fr.julienbeguier.network;
 
 import java.awt.Dimension;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.json.JSONObject;
+
+import com.sun.syndication.feed.synd.SyndContent;
+import com.sun.syndication.feed.synd.SyndEntry;
 
 import fr.julienbeguier.configuration.Configuration;
 import fr.julienbeguier.controller.Controller;
@@ -18,8 +22,10 @@ import fr.julienbeguier.observer.Notification;
 import fr.julienbeguier.observer.Observer;
 import fr.julienbeguier.requests.HttpRequest;
 import fr.julienbeguier.requests.RequestResponse;
+import fr.julienbeguier.utils.Constants;
 import fr.julienbeguier.utils.GraphicsUtils;
 import fr.julienbeguier.utils.MessageDigestUtils;
+import fr.valentinpinilla.library.FluxRss;
 
 public class RssClient extends AbstractModel {
 
@@ -160,6 +166,28 @@ public class RssClient extends AbstractModel {
 	public boolean tryRemoveCategory(String categoryName) {
 		// TODO REMOVE CATEGORY TO SERVER
 		// TODO CHECK IF THE CATEGORY EXISTS
+		return true;
+	}
+	
+	@Override
+	public boolean tryProcessFlux(Map<String, Object> params) {
+		StringBuilder sb = new StringBuilder();
+		FluxRss fr = new FluxRss(params.get(Constants.VALUE_URL).toString());
+
+		Iterator<?> entryIter = fr.getFeed().getEntries().iterator();
+		while (entryIter.hasNext()) {
+			SyndEntry syndEntry = (SyndEntry) entryIter.next();
+
+			if (syndEntry.getContents() != null) {
+				Iterator<?> it = syndEntry.getContents().iterator();
+				while (it.hasNext()) {
+					SyndContent syndContent = (SyndContent) it.next();
+
+					sb.append(syndContent.getValue());
+				}
+			}
+		}
+		params.put(Constants.VALUE_FEED, sb.toString());
 		return true;
 	}
 

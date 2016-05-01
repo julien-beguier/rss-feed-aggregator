@@ -70,17 +70,9 @@ public class Controller extends AbstractController {
 			return;
 		}else if (a.getActionType().equals(Action.ACTION_VIEW_FEED)) {
 			System.out.println("VIEW_FEED");
+			this.model.tryProcessFlux(params);
 			this.model.notifyObserver(new Notification(Action.ACTION_VIEW_FEED, params));
 			return;
 		}
 	}
-
-	//	public void setRequest(String request) {
-	//		this.request = request;
-	//	}
-
-	//	public void notifyView(Client client, String notification, PrintStream outputStream) {
-	//		outputStream.println(notification);
-	//		client.getServer().notifyObserver(notification);
-	//	}
 }

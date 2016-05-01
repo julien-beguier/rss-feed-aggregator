@@ -1,6 +1,7 @@
 package fr.julienbeguier.model;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import fr.julienbeguier.observer.Notification;
 import fr.julienbeguier.observer.Observable;
@@ -27,4 +28,5 @@ public abstract class AbstractModel implements Observable {
 	public abstract boolean tryAddCategory(String categoryName);
 	public abstract boolean tryRemoveFeed(String feedName, String feedCategory);
 	public abstract boolean tryRemoveCategory(String categoryName);
+	public abstract boolean tryProcessFlux(Map<String, Object> params);
 }

@@ -87,4 +87,8 @@ public class Constants {
 	// GUI REGISTER
 	public final static String	REGISTER_FAILURE_TITLE = "Register fail";
 	public final static String	REGISTER_FAILURE_MESSAGE = "Error: couldn't register account";
+	
+	// ERRORS POPUP
+//	public final static String	USER_NOT_LOGGED_POPUP_TITLE = "Login required";
+//	public final static String	USER_NOT_LOGGED_POPUP_MESSAGE = "Error: User not logged. Please log in first";
 }

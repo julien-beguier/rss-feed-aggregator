@@ -1,7 +1,13 @@
 package fr.julienbeguier.network;
 
 import java.awt.Dimension;
+import java.io.IOException;
 import java.util.Map;
+
+import javax.swing.JOptionPane;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import fr.julienbeguier.configuration.Configuration;
 import fr.julienbeguier.controller.Controller;
@@ -13,6 +19,11 @@ import fr.julienbeguier.gui.login.LoginPopupFrame;
 import fr.julienbeguier.model.AbstractModel;
 import fr.julienbeguier.observer.Notification;
 import fr.julienbeguier.observer.Observer;
+import fr.julienbeguier.requests.HttpRequest;
+import fr.julienbeguier.requests.RequestResponse;
+import fr.julienbeguier.requests.RequestResponse.ResponseType;
+import fr.julienbeguier.user.User;
+import fr.julienbeguier.utils.Constants;
 import fr.julienbeguier.utils.GraphicsUtils;
 import fr.julienbeguier.utils.MessageDigestUtils;
 
@@ -20,6 +31,10 @@ public class RssClient extends AbstractModel {
 
 	// SERVER
 	private final String	SERVER_IP;
+	private final String	SITE_ADD_FEED;
+	private final String	SITE_REMOVE_FEED;
+	private final String	SITE_ADD_CATEGORY;
+	private final String	SITE_REMOVE_CATEGORY;
 	//	private final int		SERVER_PORT;
 
 	// CONTROLLER
@@ -29,10 +44,16 @@ public class RssClient extends AbstractModel {
 	private RssData			rssData;
 
 	// OTHERS
+	private User			user;
 	private boolean			logged;
 
 	public RssClient(String serverIp/*, int serverPort*/) {
-		SERVER_IP = serverIp;
+		this.SERVER_IP = serverIp;
+		this.SITE_ADD_FEED = serverIp + "/RssFeed/api/rss/add";
+		this.SITE_REMOVE_FEED = serverIp + "/RssFeed/api/rss/delete";
+		this.SITE_ADD_CATEGORY = serverIp + "/RssFeed/api/category/add";
+		this.SITE_REMOVE_CATEGORY = serverIp + "/RssFeed/api/category/delete";
+
 		//		SERVER_PORT = serverPort;
 
 		this.controller = new Controller(this);
@@ -62,6 +83,7 @@ public class RssClient extends AbstractModel {
 		// TODO LOGIN TO SERVER
 		if (login.equals("admin") && password.equals(MessageDigestUtils.getInstance().md5("admin"))) {
 			System.out.println("Logged !");
+			//			this.user = new User();
 			Configuration configuration = Configuration.getInstance();
 			Map<String, Object> settings = configuration.getSettings();
 			settings.put(configuration.getKeyAuthenticationLogin(), login);
@@ -71,7 +93,7 @@ public class RssClient extends AbstractModel {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean tryLogout() {
 		// TODO LOGOUT TO SERVER
@@ -91,23 +113,51 @@ public class RssClient extends AbstractModel {
 
 	@Override
 	public boolean tryAddFeed(String feedName, String feedCategory, String feedUrl) {
-		// TODO ADD FEED TO SERVER
 		// TODO CHECK IF THE FEED EXISTS
+		HttpRequest hr = HttpRequest.getInstance();
+		try {
+			RequestResponse rr = hr.getRequest(this.SITE_ADD_FEED, "title=" + feedName, "url=" + feedUrl, "category=" + feedCategory, "uid=" + user.getId());
+			JSONObject obj = rr.getResponse().getJSONObject(rr.getKeyJsonObject());
+			if (obj.optBoolean("code") == true) {
+				return true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	@Override
+	public boolean tryRemoveFeed(String feedName, String feedCategory) {
+		// TODO REMOVE FEED TO SERVER
+		// TODO CHECK IF THE FEED EXISTS
+//		HttpRequest hr = HttpRequest.getInstance();
+//		try {
+//			RequestResponse rr = hr.getRequest(this.SITE_REMOVE_FEED, "");
+//			JSONObject obj = rr.getResponse().getJSONObject(rr.getKeyJsonObject());
+//			if (obj.optBoolean("code") == true) {
+//				return true;
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		return true;
 	}
 
 	@Override
 	public boolean tryAddCategory(String categoryName) {
-		// TODO ADD CATEGORY TO SERVER
-		// TODO CHECK IF THE CATEGORY EXISTS
-		return true;
-	}
-
-	@Override
-	public boolean tryRemoveFeed(String feedName, String feedCategory) {
-		// TODO REMOVE FEED TO SERVER
-		// TODO CHECK IF THE FEED EXISTS
-		return true;
+		// TODO CHECK IF THE CATEGORY EXIST
+		HttpRequest hr = HttpRequest.getInstance();
+		try {
+			RequestResponse rr = hr.getRequest(this.SITE_ADD_CATEGORY, "name=" + categoryName, "user=" + user.getId());
+			JSONObject obj = rr.getResponse().getJSONObject(rr.getKeyJsonObject());
+			if (obj.optBoolean("code") == true) {
+				return true;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 
 	@Override

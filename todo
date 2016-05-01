@@ -1,8 +1,8 @@
 TODO:
 
-- Serialization :
-	-- sauvegarde flux dans fichier
-	-- sauvegarde login/password dans fichier
+- Serialization :													OK
+	-- sauvegarde flux dans fichier									OK
+	-- sauvegarde login/password dans fichier						OK
 
 - JTree :
 	-- ajout d'une profondeur dans l'arbre, les articles par flux

@@ -5,15 +5,16 @@
 	},
 	feeds : {
 		categories : [
-			{name : "News"},
-			{name : "eSport"}
+			{name : "Manga"},
+			{name : "01 Net"},
+			{name : "News"}
 		],
 		rssFeeds : [
-			{name : "Les news du monde", category : "News", feedUrl : "http://google.fr"},
-			{name : "Yolo News", category : "News", feedUrl : "http://google.fr"},
-			{name : "Infos BFM.tv", category : "News", feedUrl : "http://google.fr"},
-			{name : "MLG Colombus 2016", category : "eSport", feedUrl : "http://google.fr"},
-			{name : "CSGO C'est le jeu eSport de l'année", category : "eSport", feedUrl : "http://google.fr"}
+			{name : "Anime-Kun", category : "Manga", feedUrl : "http://www.anime-kun.net/webzine/feed"},
+			{name : "01 Net Objets Connectés", category : "01 Net", feedUrl : "http://www.01net.com/rss/objets-connectes/"},
+			{name : "01 Net Jeux Video", category : "01 Net", feedUrl : "http://www.01net.com/rss/jeux-video/"},
+			{name : "Le Figaro - Magazine", category : "News", feedUrl : "http://www.lefigaro.fr/rss/figaro_lefigaromagazine.xml"},
+			{name : "Le Figaro - Santé", category : "News", feedUrl : "http://www.lefigaro.fr/rss/figaro_sante.xml"}
 		]
 	},
 	settings: {

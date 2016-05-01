@@ -34,6 +34,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.sun.syndication.feed.synd.SyndContent;
+import com.sun.syndication.feed.synd.SyndEntry;
+
 import fr.julienbeguier.configuration.Configuration;
 import fr.julienbeguier.controller.Controller;
 import fr.julienbeguier.data.RssCategory;
@@ -48,6 +51,7 @@ import fr.julienbeguier.nodes.RootNode;
 import fr.julienbeguier.observer.Notification;
 import fr.julienbeguier.observer.Observer;
 import fr.julienbeguier.utils.Constants;
+import fr.valentinpinilla.library.FluxRss;
 
 public class MainFrame extends JFrame implements Observer {
 
@@ -229,7 +233,7 @@ public class MainFrame extends JFrame implements Observer {
 		// MAIN
 		this.jep = new JEditorPane();
 		this.jep.setEditable(false);
-		this.jep.setText(""); // TODO PRINT SOMETHING (last opened feed ?)
+		this.jep.setText("");
 		this.jep.setContentType("text/html");
 		this.webScrollPanel = new JScrollPane(this.jep);
 
@@ -451,7 +455,6 @@ public class MainFrame extends JFrame implements Observer {
 		}else if (notification.getNotification().equals(Action.ACTION_REMOVE_FEED_SUCCESS)) {
 			rnf.setVisible(false);
 			this.destroyFeedNode((String) params.get(Constants.VALUE_FEED), (String) params.get(Constants.VALUE_CATEGORY));
-			// TODO REMOVE FEED SUCCESS
 		}else if (notification.getNotification().equals(Action.ACTION_REMOVE_FEED_FAILURE)) {
 			rnf.setVisible(false);
 			// TODO REMOVE FEED FAILURE
@@ -459,13 +462,32 @@ public class MainFrame extends JFrame implements Observer {
 		}else if (notification.getNotification().equals(Action.ACTION_REMOVE_CATEGORY_SUCCESS)) {
 			rnf.setVisible(false);
 			this.destroyCategoryNode((String) params.get(Constants.VALUE_CATEGORY));
-			// TODO REMOVE CATEGORY SUCCESS
 		}else if (notification.getNotification().equals(Action.ACTION_REMOVE_CATEGORY_FAILURE)) {
 			rnf.setVisible(false);
 			// TODO REMOVE CATEGORY FAILURE
 			// TODO JOPTIONPANE
 		}else if (notification.getNotification().equals(Action.ACTION_VIEW_FEED)) {
-			this.jep.setText(""); // something like that
+			String url = params.get(Constants.VALUE_URL).toString();
+			StringBuilder sb = new StringBuilder();
+			
+			System.out.println("URL : " + url);
+
+			FluxRss fr = new FluxRss(params.get(Constants.VALUE_URL).toString());
+			Iterator<?> entryIter = fr.getFeed().getEntries().iterator();
+			while (entryIter.hasNext()) {
+				SyndEntry syndEntry = (SyndEntry) entryIter.next();
+
+				if (syndEntry.getContents() != null) {
+					Iterator<?> it = syndEntry.getContents().iterator();
+					while (it.hasNext()) {
+						SyndContent syndContent = (SyndContent) it.next();
+
+						sb.append(syndContent.getValue());
+					}
+				}
+			}
+			this.jep.setText(sb.toString());
+			this.jep.setCaretPosition(0);
 		}
 	}
 }

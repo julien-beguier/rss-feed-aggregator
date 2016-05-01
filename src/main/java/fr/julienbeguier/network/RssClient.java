@@ -4,9 +4,6 @@ import java.awt.Dimension;
 import java.io.IOException;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import fr.julienbeguier.configuration.Configuration;
@@ -21,9 +18,6 @@ import fr.julienbeguier.observer.Notification;
 import fr.julienbeguier.observer.Observer;
 import fr.julienbeguier.requests.HttpRequest;
 import fr.julienbeguier.requests.RequestResponse;
-import fr.julienbeguier.requests.RequestResponse.ResponseType;
-import fr.julienbeguier.user.User;
-import fr.julienbeguier.utils.Constants;
 import fr.julienbeguier.utils.GraphicsUtils;
 import fr.julienbeguier.utils.MessageDigestUtils;
 
@@ -32,9 +26,9 @@ public class RssClient extends AbstractModel {
 	// SERVER
 	private final String	SERVER_IP;
 	private final String	SITE_ADD_FEED;
-	private final String	SITE_REMOVE_FEED;
+//	private final String	SITE_REMOVE_FEED; // need API
 	private final String	SITE_ADD_CATEGORY;
-	private final String	SITE_REMOVE_CATEGORY;
+//	private final String	SITE_REMOVE_CATEGORY; // need API
 	//	private final int		SERVER_PORT;
 
 	// CONTROLLER
@@ -44,15 +38,15 @@ public class RssClient extends AbstractModel {
 	private RssData			rssData;
 
 	// OTHERS
-	private User			user;
+//	private User			user; // need API
 	private boolean			logged;
 
 	public RssClient(String serverIp/*, int serverPort*/) {
 		this.SERVER_IP = serverIp;
 		this.SITE_ADD_FEED = serverIp + "/RssFeed/api/rss/add";
-		this.SITE_REMOVE_FEED = serverIp + "/RssFeed/api/rss/delete";
+//		this.SITE_REMOVE_FEED = serverIp + "/RssFeed/api/rss/delete";
 		this.SITE_ADD_CATEGORY = serverIp + "/RssFeed/api/category/add";
-		this.SITE_REMOVE_CATEGORY = serverIp + "/RssFeed/api/category/delete";
+//		this.SITE_REMOVE_CATEGORY = serverIp + "/RssFeed/api/category/delete";
 
 		//		SERVER_PORT = serverPort;
 
@@ -116,7 +110,8 @@ public class RssClient extends AbstractModel {
 		// TODO CHECK IF THE FEED EXISTS
 		HttpRequest hr = HttpRequest.getInstance();
 		try {
-			RequestResponse rr = hr.getRequest(this.SITE_ADD_FEED, "title=" + feedName, "url=" + feedUrl, "category=" + feedCategory, "uid=" + user.getId());
+			// USER FROM DB
+			RequestResponse rr = hr.getRequest(this.SITE_ADD_FEED, "title=" + feedName, "url=" + feedUrl, "category=" + feedCategory, "uid=1");
 			JSONObject obj = rr.getResponse().getJSONObject(rr.getKeyJsonObject());
 			if (obj.optBoolean("code") == true) {
 				return true;
@@ -149,7 +144,8 @@ public class RssClient extends AbstractModel {
 		// TODO CHECK IF THE CATEGORY EXIST
 		HttpRequest hr = HttpRequest.getInstance();
 		try {
-			RequestResponse rr = hr.getRequest(this.SITE_ADD_CATEGORY, "name=" + categoryName, "user=" + user.getId());
+			// USER FROM DB
+			RequestResponse rr = hr.getRequest(this.SITE_ADD_CATEGORY, "name=" + categoryName, "user=1");
 			JSONObject obj = rr.getResponse().getJSONObject(rr.getKeyJsonObject());
 			if (obj.optBoolean("code") == true) {
 				return true;

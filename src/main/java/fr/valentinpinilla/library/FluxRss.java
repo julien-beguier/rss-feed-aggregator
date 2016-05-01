@@ -105,7 +105,6 @@ public class FluxRss {
             SyndEntry syndEntry = (SyndEntry) entryIter.next();
             System.out.println(syndEntry.getDescription().getValue());
             System.out.println("--------------------------------");
-
         }
     }
 
@@ -114,7 +113,6 @@ public class FluxRss {
             SyndEntry syndEntry = (SyndEntry) entryIter.next();
             System.out.println(syndEntry.getPublishedDate());
             System.out.println("--------------------------------");
-
         }
     }
 }

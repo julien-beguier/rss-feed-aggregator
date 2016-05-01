@@ -463,7 +463,6 @@ public class MainFrame extends JFrame implements Observer {
 			// TODO REMOVE CATEGORY FAILURE
 			// TODO JOPTIONPANE
 		}else if (notification.getNotification().equals(Action.ACTION_VIEW_FEED)) {
-			System.out.println(params.get(Constants.VALUE_FEED));
 			this.jep.setText((String) params.get(Constants.VALUE_FEED));
 			this.jep.setCaretPosition(0);
 		}

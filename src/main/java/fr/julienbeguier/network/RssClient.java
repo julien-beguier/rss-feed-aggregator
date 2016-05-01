@@ -182,7 +182,6 @@ public class RssClient extends AbstractModel {
 				Iterator<?> it = syndEntry.getContents().iterator();
 				while (it.hasNext()) {
 					SyndContent syndContent = (SyndContent) it.next();
-
 					sb.append(syndContent.getValue());
 				}
 			}

@@ -49,9 +49,9 @@ public class RssClient extends AbstractModel {
 
 	public RssClient(String serverIp/*, int serverPort*/) {
 		this.SERVER_IP = serverIp;
-		this.SITE_ADD_FEED = serverIp + "/RssFeed/api/rss/add";
+		this.SITE_ADD_FEED = serverIp + "RssFeed/api/rss/add";
 //		this.SITE_REMOVE_FEED = serverIp + "/RssFeed/api/rss/delete";
-		this.SITE_ADD_CATEGORY = serverIp + "/RssFeed/api/category/add";
+		this.SITE_ADD_CATEGORY = serverIp + "RssFeed/api/category/add";
 //		this.SITE_REMOVE_CATEGORY = serverIp + "/RssFeed/api/category/delete";
 
 		//		SERVER_PORT = serverPort;
@@ -114,18 +114,18 @@ public class RssClient extends AbstractModel {
 	@Override
 	public boolean tryAddFeed(String feedName, String feedCategory, String feedUrl) {
 		// TODO CHECK IF THE FEED EXISTS
-		HttpRequest hr = HttpRequest.getInstance();
-		try {
-			// USER FROM DB
-			RequestResponse rr = hr.getRequest(this.SITE_ADD_FEED, "title=" + feedName, "url=" + feedUrl, "category=" + feedCategory, "uid=1");
-			JSONObject obj = rr.getResponse().getJSONObject(rr.getKeyJsonObject());
-			if (obj.optBoolean("code") == true) {
+//		HttpRequest hr = HttpRequest.getInstance();
+//		try {
+//			// USER FROM DB
+//			RequestResponse rr = hr.getRequest(this.SITE_ADD_FEED, "title=" + feedName, "url=" + feedUrl, "category=" + feedCategory, "uid=1");
+//			JSONObject obj = rr.getResponse().getJSONObject(rr.getKeyJsonObject());
+//			if (obj.optBoolean("code") == true) {
 				return true;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return false;
 	}
 	
 	@Override
@@ -148,18 +148,18 @@ public class RssClient extends AbstractModel {
 	@Override
 	public boolean tryAddCategory(String categoryName) {
 		// TODO CHECK IF THE CATEGORY EXIST
-		HttpRequest hr = HttpRequest.getInstance();
-		try {
-			// USER FROM DB
-			RequestResponse rr = hr.getRequest(this.SITE_ADD_CATEGORY, "name=" + categoryName, "user=1");
-			JSONObject obj = rr.getResponse().getJSONObject(rr.getKeyJsonObject());
-			if (obj.optBoolean("code") == true) {
+//		HttpRequest hr = HttpRequest.getInstance();
+//		try {
+//			// USER FROM DB
+//			RequestResponse rr = hr.getRequest(this.SITE_ADD_CATEGORY, "name=" + categoryName, "user=1");
+//			JSONObject obj = rr.getResponse().getJSONObject(rr.getKeyJsonObject());
+//			if (obj.optBoolean("code") == true) {
 				return true;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return false;
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//		return false;
 	}
 
 	@Override

@@ -4,6 +4,8 @@ import fr.julienbeguier.gui.MainFrame.Type;
 
 public class Constants {
 
+	public final static String	CONFIGURATION_FOLDER = "rssfeedaggregator";
+	
 	public final static String	VALUE_EMPTY = "";
 	public final static String	VALUE_LOGIN = "login";
 	public final static String	VALUE_PASSWORD = "password";

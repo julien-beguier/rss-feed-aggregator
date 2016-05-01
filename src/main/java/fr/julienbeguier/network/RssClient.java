@@ -20,11 +20,11 @@ public class RssClient extends AbstractModel {
 
 	// SERVER
 	private final String	SERVER_IP;
-//	private final int		SERVER_PORT;
+	//	private final int		SERVER_PORT;
 
 	// CONTROLLER
 	private Controller		controller;
-	
+
 	// DATA
 	private RssData			rssData;
 
@@ -33,10 +33,10 @@ public class RssClient extends AbstractModel {
 
 	public RssClient(String serverIp/*, int serverPort*/) {
 		SERVER_IP = serverIp;
-//		SERVER_PORT = serverPort;
+		//		SERVER_PORT = serverPort;
 
 		this.controller = new Controller(this);
-		
+
 		this.rssData = new RssData();
 
 		this.logged = false;
@@ -45,13 +45,12 @@ public class RssClient extends AbstractModel {
 	}
 
 	public void login(String login, String password) {
-		
-		System.out.println("Login : " + login);
-		System.out.println("Password : " + password);
-		
 		if (!login.isEmpty() && !password.isEmpty()) {
-			if (tryLogin(login, password) == true)
+			if (tryLogin(login, password) == true) {
+				logged = true;
+				this.showMainFrame();
 				return;
+			}
 		}
 
 		showLoginPopup(login);
@@ -72,6 +71,12 @@ public class RssClient extends AbstractModel {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean tryLogout() {
+		// TODO LOGOUT TO SERVER
+		return false;
+	}
 
 	@Override
 	public boolean tryRegister(String login, String password, String email) {
@@ -83,28 +88,28 @@ public class RssClient extends AbstractModel {
 		//		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean tryAddFeed(String feedName, String feedCategory, String feedUrl) {
 		// TODO ADD FEED TO SERVER
 		// TODO CHECK IF THE FEED EXISTS
 		return true;
 	}
-	
+
 	@Override
 	public boolean tryAddCategory(String categoryName) {
 		// TODO ADD CATEGORY TO SERVER
 		// TODO CHECK IF THE CATEGORY EXISTS
 		return true;
 	}
-	
+
 	@Override
 	public boolean tryRemoveFeed(String feedName, String feedCategory) {
 		// TODO REMOVE FEED TO SERVER
 		// TODO CHECK IF THE FEED EXISTS
 		return true;
 	}
-	
+
 	@Override
 	public boolean tryRemoveCategory(String categoryName) {
 		// TODO REMOVE CATEGORY TO SERVER

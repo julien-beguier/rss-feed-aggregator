@@ -3,24 +3,32 @@ package fr.julienbeguier.configuration;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URISyntaxException;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import fr.julienbeguier.utils.Constants;
+import fr.julienbeguier.utils.OSChecker;
+
 public class Configuration {
 
 	public static Configuration instance = null;
 
 	// CONST VARS
+	private final static String	CONFIGURATION_FILE = "config.json";
 	private final String	CONFIGURATION_PATH = "/config.json";
 	private final URL		CONFIGURATION_URL;
+	private boolean			exist;
 
 	// KEYS
 	private final String	CONF_KEY_AUTHENTICATION = "authentication";
@@ -51,29 +59,70 @@ public class Configuration {
 
 	private Configuration() {
 		this.CONFIGURATION_URL = this.getClass().getResource(this.CONFIGURATION_PATH);
+		this.exist = false;
 		
+		this.checkConfigurationFile();
 		this.loadConfiguration();
+	}
+	
+	private void checkConfigurationFile() {
+		File settings;
+		try {
+			settings = getSettingsFile();
+			if (settings.exists()) {
+				this.exist = true;
+			}else {
+				this.exist = false;
+			}
+		} catch (PrivilegedActionException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void loadConfiguration() {
 		String confFileContent = null;
+		BufferedReader br;
 
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(this.CONFIGURATION_URL.openStream()));
-			String line;
-			StringBuffer fileContent = new StringBuffer(); 
-			while ((line = br.readLine()) != null) {
-				fileContent.append(line);
-				fileContent.append('\r');
+		if (this.settingsExists()) {
+			try { // appdata/.rssfeedaggregator
+				br = new BufferedReader(new InputStreamReader(new FileInputStream(getSettingsFile())));
+				String line;
+				StringBuffer fileContent = new StringBuffer(); 
+				while ((line = br.readLine()) != null) {
+					fileContent.append(line);
+					fileContent.append('\r');
+				}
+				confFileContent = fileContent.toString().trim();
+			} catch (IOException | PrivilegedActionException e) {
+				e.printStackTrace();
 			}
-			confFileContent = fileContent.toString().trim();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 
-		if (confFileContent == null) {
-			System.err.println("Error, the program couldn't read the configuration file: \'" + this.CONFIGURATION_PATH + "\'");
-			System.exit(-1);
+			if (confFileContent == null) {
+				try {
+					System.err.println("Error, the program couldn't read the configuration file: \'" + Configuration.getSettingsFile().getAbsolutePath().toString() + "\'");
+				} catch (PrivilegedActionException e) {
+					e.printStackTrace();
+				}
+				System.exit(-1);
+			}
+		}else { // from jar
+			try {
+				br = new BufferedReader(new InputStreamReader(this.CONFIGURATION_URL.openStream()));
+				String line;
+				StringBuffer fileContent = new StringBuffer(); 
+				while ((line = br.readLine()) != null) {
+					fileContent.append(line);
+					fileContent.append('\r');
+				}
+				confFileContent = fileContent.toString().trim();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			if (confFileContent == null) {
+				System.err.println("Error, the program couldn't read the configuration file: \'" + this.CONFIGURATION_PATH + "\'");
+				System.exit(-1);
+			}
 		}
 
 		try {
@@ -99,17 +148,19 @@ public class Configuration {
 		String saveContent = null;
 
 		try {
-			File configurationFile = new File(this.CONFIGURATION_URL.toURI());
-			BufferedWriter bw = new BufferedWriter(new FileWriter(configurationFile.getAbsoluteFile()));
+			File configurationFile = Configuration.getSettingsFile();
+			BufferedWriter bw = new BufferedWriter(new FileWriter(configurationFile, false));
+			JSONObject newConfiguration = new JSONObject();
 
-			this.configurationObj.put(this.CONF_KEY_AUTHENTICATION, this.authenticationObj);
-			this.configurationObj.put(this.CONF_KEY_SETTINGS, this.settingsObj);
-			this.configurationObj.put(this.CONF_KEY_SETTINGS_SERVER, this.serverObj);
-			this.configurationObj.put(this.CONF_KEY_FEEDS, this.feedsObj);			
-			saveContent = this.configurationObj.toString();
+			this.authenticationObj.put(this.CONF_KEY_AUTHENTICATION_LOGIN, this.settings.get(this.CONF_KEY_AUTHENTICATION_LOGIN));
+			this.authenticationObj.put(this.CONF_KEY_AUTHENTICATION_PASSWORD, this.settings.get(this.CONF_KEY_AUTHENTICATION_PASSWORD));
+			newConfiguration.put(this.CONF_KEY_AUTHENTICATION, this.authenticationObj);
+			newConfiguration.put(this.CONF_KEY_SETTINGS, this.settingsObj);
+			newConfiguration.put(this.CONF_KEY_FEEDS, this.feedsObj);			
+			saveContent = newConfiguration.toString(2);
 			bw.write(saveContent);
 			bw.close();
-		} catch (IOException | URISyntaxException e) {
+		} catch (IOException | PrivilegedActionException e) {
 			e.printStackTrace();
 		}
 	}
@@ -119,6 +170,45 @@ public class Configuration {
 			instance = new Configuration();
 		}
 		return instance;
+	}
+	
+	private boolean settingsExists() {
+		return this.exist;
+	}
+	
+	public static File getSettingsFile() throws PrivilegedActionException {
+		return new File(Configuration.getRssDir(), Configuration.CONFIGURATION_FILE);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public static String getRssDir() throws PrivilegedActionException {
+		return (String) AccessController.doPrivileged(new PrivilegedExceptionAction() {
+			public Object run() throws Exception {
+				return Configuration.getWorkingDirectory(Constants.CONFIGURATION_FOLDER) + File.separator;
+			}
+		});
+	}
+
+	private static File getWorkingDirectory(String applicationName) {
+		String userHome = System.getProperty("user.home", ".");
+		File workingDirectory;
+		if (OSChecker.isUnix() || OSChecker.isSolaris()) {
+			workingDirectory = new File(userHome, '.' + applicationName + '/');
+		} else if (OSChecker.isWindows()) {
+			String applicationData = System.getenv("APPDATA");
+			if (applicationData != null) {
+				workingDirectory = new File(applicationData, "." + applicationName + '/');
+			}else {
+				workingDirectory = new File(userHome, '.' + applicationName + '/');
+			}
+		} else if (OSChecker.isMac()) {
+			workingDirectory = new File(userHome, "Library/Application Support/" + applicationName);
+		} else {
+			workingDirectory = new File(userHome, applicationName + '/');
+		}
+		
+		workingDirectory.mkdirs();
+		return workingDirectory;
 	}
 
 	public Map<String, Object> getSettings() {

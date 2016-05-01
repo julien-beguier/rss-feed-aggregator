@@ -21,6 +21,7 @@ public abstract class AbstractModel implements Observable {
 	public abstract void notifyObserver(Notification notification);
 	
 	public abstract boolean tryLogin(String login, String password);
+	public abstract boolean tryLogout();
 	public abstract boolean tryRegister(String login, String password, String email);
 	public abstract boolean tryAddFeed(String feedName, String feedCategory, String feedUrl);
 	public abstract boolean tryAddCategory(String categoryName);
